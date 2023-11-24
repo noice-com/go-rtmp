@@ -10,6 +10,7 @@ package handshake
 import (
 	"bytes"
 	"crypto/rand"
+	"fmt"
 	"io"
 	"time"
 
@@ -50,6 +51,8 @@ func HandshakeWithClient(r io.Reader, w io.Writer, config *Config) error {
 		return err
 	}
 
+	fmt.Printf("c0: %v\n", c0)
+
 	// TODO: check c0 RTMP version
 
 	// Send S0
@@ -70,11 +73,15 @@ func HandshakeWithClient(r io.Reader, w io.Writer, config *Config) error {
 		return err
 	}
 
+	fmt.Printf("s1: %v\n", s1)
+
 	// Recv C1
 	var c1 S1C1
 	if err := d.DecodeS1C1(&c1); err != nil {
 		return err
 	}
+
+	fmt.Printf("c1: %v\n", c1)
 
 	// TODO: check c1 Client version. e.g. [9 0 124 2]
 
@@ -88,11 +95,15 @@ func HandshakeWithClient(r io.Reader, w io.Writer, config *Config) error {
 		return err
 	}
 
+	fmt.Printf("s2: %v\n", s2)
+
 	// Recv C2
 	var c2 S2C2
 	if err := d.DecodeS2C2(&c2); err != nil {
 		return err
 	}
+
+	fmt.Printf("c2: %v\n", c2)
 
 	if config.SkipHandshakeVerification {
 		return nil
